@@ -1,10 +1,11 @@
 {
   "name": "Monkeycine VIP",
   "short_name": "Monkeycine",
-  "start_url": "/",
+  "start_url": "/Monkeysala/",
+  "scope": "/Monkeysala/",
   "display": "standalone",
-  "background_color": "#0d1117",
-  "theme_color": "#8957e5",
+  "background_color": "#1a1a24",
+  "theme_color": "#bfa3ff",
   "icons": [
     {
       "src": "https://cdn-icons-png.flaticon.com/512/2809/2809794.png",
