@@ -9,7 +9,7 @@
     
     <style>
         body { 
-            background-color: #1a1a24; /* Tono morado muy oscuro */
+            background-color: #1a1a24; 
             color: #e2e8f0; 
             font-family: 'Nunito', sans-serif; 
             display: flex; 
@@ -24,105 +24,51 @@
         
         .header { text-align: center; margin-bottom: 30px; position: relative; }
         .header h1 { 
-            color: #bfa3ff; 
-            font-size: 3em; 
-            margin: 0; 
-            font-weight: 900;
+            color: #bfa3ff; font-size: 3em; margin: 0; font-weight: 900;
             text-shadow: 3px 3px 0px #6b21a8, -1px -1px 0px #000;
             transform: rotate(-2deg);
         }
         .header p { 
-            background: #ff79c6; 
-            color: #282a36; 
-            display: inline-block; 
-            padding: 4px 12px; 
-            border-radius: 20px; 
-            font-weight: 900; 
-            font-size: 14px; 
-            transform: rotate(3deg);
-            border: 2px dashed #282a36;
+            background: #ff79c6; color: #282a36; display: inline-block; 
+            padding: 4px 12px; border-radius: 20px; font-weight: 900; 
+            font-size: 14px; transform: rotate(3deg); border: 2px dashed #282a36;
         }
         
         .card { 
-            background: #282a36; 
-            border: 3px dashed #6272a4; 
-            border-radius: 15px; 
-            padding: 25px 20px; 
-            width: 100%; 
-            max-width: 400px; 
-            box-shadow: 8px 8px 0px rgba(0,0,0,0.4); 
-            margin-bottom: 25px; 
-            box-sizing: border-box;
-            transition: all 0.3s ease;
+            background: #282a36; border: 3px dashed #6272a4; 
+            border-radius: 15px; padding: 25px 20px; width: 100%; 
+            max-width: 400px; box-shadow: 8px 8px 0px rgba(0,0,0,0.4); 
+            margin-bottom: 25px; box-sizing: border-box;
         }
 
-        /* Pantalla de Perfiles */
         .perfiles { display: flex; gap: 15px; justify-content: center; }
         .perfil-btn {
-            background: #44475a;
-            border: 2px solid #bd93f9;
-            color: white;
-            padding: 15px 20px;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: bold;
-            font-family: 'Nunito', sans-serif;
-            cursor: pointer;
-            flex: 1;
-            transition: transform 0.2s;
-            box-shadow: 4px 4px 0px #bd93f9;
+            background: #44475a; border: 2px solid #bd93f9; color: white;
+            padding: 15px 20px; border-radius: 12px; font-size: 18px;
+            font-weight: bold; cursor: pointer; flex: 1;
+            transition: transform 0.2s; box-shadow: 4px 4px 0px #bd93f9;
         }
         .perfil-btn:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #bd93f9; }
 
-        /* Controles ocultos por defecto */
         #zona-liz, #zona-sofi { display: none; }
         
         label { font-size: 14px; color: #8be9fd; font-weight: bold; margin-bottom: 8px; display: block; }
-        
         input[type="text"] { 
-            width: 100%; 
-            box-sizing: border-box; 
-            padding: 15px; 
-            border-radius: 10px; 
-            border: 2px solid #6272a4; 
-            background: #191a21; 
-            color: white; 
-            margin-bottom: 20px; 
-            font-size: 14px; 
-            font-family: 'Nunito', sans-serif;
+            width: 100%; box-sizing: border-box; padding: 15px; 
+            border-radius: 10px; border: 2px solid #6272a4; 
+            background: #191a21; color: white; margin-bottom: 20px; 
+            font-size: 14px; font-family: 'Nunito', sans-serif;
         }
-        input[type="text"]:focus { outline: none; border-color: #50fa7b; }
         
         .btn-lanzar { 
-            background-color: #50fa7b; 
-            color: #282a36; 
-            border: none; 
-            padding: 16px; 
-            border-radius: 10px; 
-            font-size: 18px; 
-            font-weight: 900; 
-            width: 100%; 
-            cursor: pointer; 
-            box-shadow: 4px 4px 0px #218c41; 
-            transition: transform 0.1s; 
-            font-family: 'Nunito', sans-serif;
+            background-color: #50fa7b; color: #282a36; border: none; 
+            padding: 16px; border-radius: 10px; font-size: 18px; 
+            font-weight: 900; width: 100%; cursor: pointer; 
+            box-shadow: 4px 4px 0px #218c41; transition: transform 0.1s; 
         }
         .btn-lanzar:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #218c41; }
         
-        .memory-card { 
-            background: #282a36; 
-            border-radius: 15px; 
-            padding: 20px; 
-            width: 100%; 
-            max-width: 400px; 
-            border-left: 8px solid #ff5555; 
-            box-sizing: border-box;
-            box-shadow: 4px 4px 10px rgba(0,0,0,0.3);
-        }
-        .memory-card h3 { margin-top: 0; color: #f1fa8c; font-size: 18px; font-weight: 900; transform: rotate(-1deg);}
-        .cita-item { padding: 12px; background: #191a21; border-radius: 8px; font-size: 14px; color: #f8f8f2; border: 1px dashed #6272a4; text-align: center; }
-
-        .btn-volver { background: none; border: none; color: #ff79c6; text-decoration: underline; cursor: pointer; margin-bottom: 15px; font-family: 'Nunito', sans-serif; font-weight: bold;}
+        .btn-volver { background: none; border: none; color: #ff79c6; text-decoration: underline; cursor: pointer; margin-bottom: 15px; font-weight: bold;}
     </style>
 </head>
 <body>
@@ -144,7 +90,7 @@
         <button class="btn-volver" onclick="volverInicio()">← Cambiar perfil</button>
         <label>Pegar URL del Capítulo:</label>
         <input type="text" id="link-pelicula" placeholder="https://disneyplus.com/...">
-        <button class="btn-lanzar" onclick="lanzarCitaLiz()">Preparar Sala 🚀</button>
+        <button class="btn-lanzar" onclick="lanzarCita()">Preparar Sala 🚀</button>
     </div>
 
     <div class="card" id="zona-sofi">
@@ -153,14 +99,7 @@
             <p style="color: #8be9fd; font-weight: bold;">Estado de la sala:</p>
             <p id="estado-sala-sofi" style="color: #ffb86c; font-style: italic;">Esperando a que Liz ponga el link... 🥺</p>
         </div>
-        <button class="btn-lanzar" style="background: #6272a4; box-shadow: 4px 4px 0px #44475a; cursor: not-allowed;" id="btn-entrar-sofi">Entrar a la Cita ✨</button>
-    </div>
-
-    <div class="memory-card">
-        <h3>🗂️ Memory Card</h3>
-        <div id="lista-citas">
-            <div class="cita-item">Aquí aparecerán todas sus citas de cine cuando conectemos Firebase... 💖</div>
-        </div>
+        <button class="btn-lanzar" id="btn-entrar-sofi" onclick="lanzarCita()">Entrar a la Cita ✨</button>
     </div>
 
     <script>
@@ -179,23 +118,22 @@
             document.getElementById('zona-sofi').style.display = 'none';
         }
 
-        function lanzarCitaLiz() {
-            const inputLink = document.getElementById('link-pelicula').value.trim();
-            if (!inputLink || !inputLink.includes('disneyplus.com')) {
-                alert("⚠️ ¡Líder, necesitas pegar un link válido de Disney+!");
-                return;
-            }
+        function lanzarCita() {
+            // Obtener el link de Liz o el valor predeterminado si no se ha configurado Firebase aún
+            let inputLink = document.getElementById('link-pelicula') ? document.getElementById('link-pelicula').value.trim() : "";
+            if (inputLink === "") inputLink = "https://www.disneyplus.com/es-mx/play/85fdb4a9"; 
             
             const urlBase = inputLink.split('?')[0];
             const linkMagico = urlBase + "?sala=monkeycine";
             
-            // Más adelante, aquí guardaremos el link en Firebase en vez de saltar directo
-            window.location.href = linkMagico;
+            // Lógica de apertura forzada en Lemur
+            const linkSinHttps = linkMagico.replace("https://", "");
+            const urlLemur = `intent://${linkSinHttps}#Intent;scheme=https;package=com.lemurbrowser.exts;end;`;
+            
+            window.location.href = urlLemur;
         }
 
-        // ==========================================
-        // REGISTRO DEL SERVICE WORKER (Para Modo App)
-        // ==========================================
+        // Registro Service Worker para PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
