@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Monkeycine Hub</title>
+    <link rel="manifest" href="manifest.json">
+    
+    <style>
+        body { 
+            background-color: #0d1117; 
+            color: #c9d1d9; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 30px 20px; 
+            margin: 0; 
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        
+        .header { text-align: center; margin-bottom: 40px; width: 100%; }
+        .header h1 { color: #8957e5; font-size: 2.8em; margin: 0; text-shadow: 2px 2px 0px rgba(0,0,0,0.8); }
+        .header p { color: #8b949e; font-size: 14px; margin-top: 5px; font-weight: bold; }
+        
+        .card { 
+            background: #161b22; 
+            border: 1px solid #30363d; 
+            border-radius: 15px; 
+            padding: 25px 20px; 
+            width: 100%; 
+            max-width: 400px; 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5); 
+            margin-bottom: 30px; 
+        }
+        
+        label { font-size: 13px; color: #58a6ff; font-weight: bold; display: block; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;}
+        
+        input[type="text"] { 
+            width: 100%; 
+            box-sizing: border-box; 
+            padding: 15px; 
+            border-radius: 8px; 
+            border: 1px solid #30363d; 
+            background: #010409; 
+            color: white; 
+            margin-bottom: 20px; 
+            font-size: 14px; 
+            outline: none;
+        }
+        input[type="text"]:focus { border-color: #58a6ff; }
+        
+        .btn-lanzar { 
+            background-color: #238636; 
+            color: white; 
+            border: none; 
+            padding: 16px; 
+            border-radius: 8px; 
+            font-size: 18px; 
+            font-weight: bold; 
+            width: 100%; 
+            cursor: pointer; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
+            transition: transform 0.1s, background-color 0.2s; 
+        }
+        .btn-lanzar:active { transform: scale(0.97); background-color: #2ea043; }
+        
+        .memory-card { 
+            background: #1c2128; 
+            border-radius: 12px; 
+            padding: 20px; 
+            width: 100%; 
+            max-width: 400px; 
+            border-left: 5px solid #d73a49; 
+            box-sizing: border-box;
+        }
+        .memory-card h3 { margin-top: 0; margin-bottom: 15px; color: #ffcc00; font-size: 16px; display: flex; align-items: center; gap: 8px;}
+        .cita-item { padding: 12px; background: #0d1117; border-radius: 6px; font-size: 13px; color: #8b949e; border: 1px solid #30363d; text-align: center; font-style: italic;}
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🍿 Monkeycine</h1>
+        <p>SALA VIP EXCLUSIVA</p>
+    </div>
+
+    <div class="card">
+        <label for="link-pelicula">URL del Capítulo a ver:</label>
+        <input type="text" id="link-pelicula" placeholder="Pega el link de Disney+ aquí...">
+        <button class="btn-lanzar" onclick="lanzarCita()">Entrar a la Cita 🚀</button>
+    </div>
+
+    <div class="memory-card">
+        <h3>🗂️ Memory Card</h3>
+        <div id="lista-citas">
+            <div class="cita-item">Aquí conectaremos Firebase para guardar el historial de sus citas...</div>
+        </div>
+    </div>
+
+    <script>
+        function lanzarCita() {
+            const inputLink = document.getElementById('link-pelicula').value.trim();
+            
+            if (!inputLink) {
+                alert("⚠️ ¡Líder, necesitas pegar el link de la película primero!");
+                return;
+            }
+            
+            if (!inputLink.includes('disneyplus.com')) {
+                alert("⚠️ Ese no parece un link válido de Disney+");
+                return;
+            }
+            
+            // Limpia el link de cualquier parámetro basura que traiga por defecto
+            const urlBase = inputLink.split('?')[0];
+            
+            // Inyecta nuestra sala maestra
+            const linkMagico = urlBase + "?sala=monkeycine";
+            
+            // Forzamos la redirección en la misma pestaña
+            window.location.href = linkMagico;
+        }
+    </script>
+
+</body>
+</html>
