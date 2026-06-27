@@ -104,7 +104,7 @@
         <button class="btn-volver" onclick="volverInicio()">← Cambiar perfil</button>
         <label>Pegar URL del Capítulo:</label>
         <input type="text" id="link-pelicula" placeholder="https://disneyplus.com/...">
-        <button class="btn-lanzar" onclick="lanzarCita()">Preparar Sala 🚀</button>
+        <button class="btn-lanzar" onclick="prepararSalaLiz()">Preparar Sala 🚀</button>
     </div>
 
     <div class="card" id="zona-sofi">
@@ -113,49 +113,118 @@
             <p style="color: #8be9fd; font-weight: bold;">Estado de la sala:</p>
             <p id="estado-sala-sofi" style="color: #ffb86c; font-style: italic;">Esperando a que Liz ponga el link... 🥺</p>
         </div>
-        <button class="btn-lanzar" id="btn-entrar-sofi" onclick="lanzarCita()">Entrar a la Cita ✨</button>
+        <button class="btn-lanzar" id="btn-entrar-sofi" onclick="entrarSalaSofi()" style="background: #6272a4; box-shadow: 4px 4px 0px #44475a; cursor: not-allowed;" disabled>Entrar a la Cita ✨</button>
     </div>
 
     <div class="memory-card">
         <h3>🗂️ Memory Card</h3>
         <div id="lista-citas">
-            <div class="cita-item">Aquí aparecerán todas sus citas de cine cuando conectemos Firebase... 💖</div>
+            <div class="cita-item">Historial de citas listo para conectarse... 💖</div>
         </div>
     </div>
 
-    <script>
-        function seleccionarPerfil(perfil) {
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        // Tus llaves exactas
+        const firebaseConfig = {
+            apiKey: "AIzaSyD5L51DKMU8ozgN8wTt9WATlgzjI7lQ2Ls",
+            authDomain: "monkeycine.firebaseapp.com",
+            projectId: "monkeycine",
+            storageBucket: "monkeycine.firebasestorage.app",
+            messagingSenderId: "134472914894",
+            appId: "1:134472914894:web:df59027eb99b5c05207d9f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        let linkMagicoActual = "";
+
+        // =========================================
+        // LÓGICA DE PERFILES Y NOTIFICACIONES
+        // =========================================
+        window.seleccionarPerfil = function(perfil) {
             document.getElementById('seleccion-perfil').style.display = 'none';
-            
             if(perfil === 'liz') {
                 document.getElementById('zona-liz').style.display = 'block';
             } else {
                 document.getElementById('zona-sofi').style.display = 'block';
-                
-                // NUEVO: Pedir permisos de notificación al celular de Sofi
-                if ("Notification" in window && Notification.permission !== "granted") {
+                if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
                     Notification.requestPermission();
                 }
             }
         }
 
-        function volverInicio() {
+        window.volverInicio = function() {
             document.getElementById('seleccion-perfil').style.display = 'block';
             document.getElementById('zona-liz').style.display = 'none';
             document.getElementById('zona-sofi').style.display = 'none';
         }
 
-        function lanzarCita() {
-            let inputLink = document.getElementById('link-pelicula') ? document.getElementById('link-pelicula').value.trim() : "";
-            if (inputLink === "") inputLink = "https://www.disneyplus.com/es-mx/play/85fdb4a9"; 
+        // =========================================
+        // ESCUCHADOR DE FIREBASE (TELEPATÍA PARA SOFI)
+        // =========================================
+        const citaRef = ref(db, 'cita_actual');
+        onValue(citaRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data && data.url) {
+                linkMagicoActual = data.url;
+                
+                const btnSofi = document.getElementById('btn-entrar-sofi');
+                const estadoSofi = document.getElementById('estado-sala-sofi');
+                
+                if(btnSofi && estadoSofi) {
+                    // Encender botón de Sofi
+                    btnSofi.style.background = '#50fa7b';
+                    btnSofi.style.boxShadow = '4px 4px 0px #218c41';
+                    btnSofi.style.cursor = 'pointer';
+                    btnSofi.disabled = false;
+                    
+                    // Cambiar texto
+                    estadoSofi.style.color = '#50fa7b';
+                    estadoSofi.textContent = "¡Liz ya preparó la peli! 🍿";
+                    
+                    // Lanzar notificación si está en perfil Sofi
+                    if (document.getElementById('zona-sofi').style.display === 'block') {
+                        if ("Notification" in window && Notification.permission === "granted") {
+                            new Notification("¡Monkeycine Listo! 🍿", { body: "Liz acaba de encender la sala. ¡Entra ya!" });
+                        }
+                    }
+                }
+            }
+        });
+
+        // =========================================
+        // BOTÓN LIZ: GUARDAR Y ABRIR LEMUR
+        // =========================================
+        window.prepararSalaLiz = function() {
+            const inputLink = document.getElementById('link-pelicula').value.trim();
+            if (!inputLink || !inputLink.includes('disneyplus.com')) {
+                alert("⚠️ ¡Líder, necesitas pegar un link válido de Disney+!");
+                return;
+            }
             
             const urlBase = inputLink.split('?')[0];
             const linkMagico = urlBase + "?sala=monkeycine";
             
-            // Lógica de apertura forzada en Lemur Browser
-            const linkSinHttps = linkMagico.replace("https://", "");
-            const urlLemur = `intent://${linkSinHttps}#Intent;scheme=https;package=com.lemurbrowser.exts;end;`;
+            // Subir a Firebase
+            set(ref(db, 'cita_actual'), { url: linkMagico }).then(() => {
+                // Y abrirle Lemur a Liz también
+                const linkSinHttps = linkMagico.replace("https://", "");
+                const urlLemur = `intent://${linkSinHttps}#Intent;scheme=https;package=com.lemurbrowser.exts;end;`;
+                window.location.href = urlLemur;
+            });
+        }
+
+        // =========================================
+        // BOTÓN SOFI: LEER Y ABRIR LEMUR
+        // =========================================
+        window.entrarSalaSofi = function() {
+            if (!linkMagicoActual) return; // Si el link está vacío, no hace nada
             
+            const linkSinHttps = linkMagicoActual.replace("https://", "");
+            const urlLemur = `intent://${linkSinHttps}#Intent;scheme=https;package=com.lemurbrowser.exts;end;`;
             window.location.href = urlLemur;
         }
 
