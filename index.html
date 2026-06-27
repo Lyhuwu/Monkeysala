@@ -3,80 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Monkeycine Hub</title>
+    <title>Monkeycine VIP</title>
     <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
         body { 
-            background-color: #0d1117; 
-            color: #c9d1d9; 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
+            background-color: #1a1a24; /* Tono morado muy oscuro */
+            color: #e2e8f0; 
+            font-family: 'Nunito', sans-serif; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            padding: 30px 20px; 
+            padding: 20px; 
             margin: 0; 
-            height: 100vh;
-            box-sizing: border-box;
+            min-height: 100vh;
+            background-image: radial-gradient(#30363d 1px, transparent 1px);
+            background-size: 20px 20px;
         }
         
-        .header { text-align: center; margin-bottom: 40px; width: 100%; }
-        .header h1 { color: #8957e5; font-size: 2.8em; margin: 0; text-shadow: 2px 2px 0px rgba(0,0,0,0.8); }
-        .header p { color: #8b949e; font-size: 14px; margin-top: 5px; font-weight: bold; }
+        .header { text-align: center; margin-bottom: 30px; position: relative; }
+        .header h1 { 
+            color: #bfa3ff; 
+            font-size: 3em; 
+            margin: 0; 
+            font-weight: 900;
+            text-shadow: 3px 3px 0px #6b21a8, -1px -1px 0px #000;
+            transform: rotate(-2deg);
+        }
+        .header p { 
+            background: #ff79c6; 
+            color: #282a36; 
+            display: inline-block; 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            font-weight: 900; 
+            font-size: 14px; 
+            transform: rotate(3deg);
+            border: 2px dashed #282a36;
+        }
         
         .card { 
-            background: #161b22; 
-            border: 1px solid #30363d; 
+            background: #282a36; 
+            border: 3px dashed #6272a4; 
             border-radius: 15px; 
             padding: 25px 20px; 
             width: 100%; 
             max-width: 400px; 
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5); 
-            margin-bottom: 30px; 
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.4); 
+            margin-bottom: 25px; 
+            box-sizing: border-box;
+            transition: all 0.3s ease;
         }
+
+        /* Pantalla de Perfiles */
+        .perfiles { display: flex; gap: 15px; justify-content: center; }
+        .perfil-btn {
+            background: #44475a;
+            border: 2px solid #bd93f9;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            flex: 1;
+            transition: transform 0.2s;
+            box-shadow: 4px 4px 0px #bd93f9;
+        }
+        .perfil-btn:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #bd93f9; }
+
+        /* Controles ocultos por defecto */
+        #zona-liz, #zona-sofi { display: none; }
         
-        label { font-size: 13px; color: #58a6ff; font-weight: bold; display: block; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;}
+        label { font-size: 14px; color: #8be9fd; font-weight: bold; margin-bottom: 8px; display: block; }
         
         input[type="text"] { 
             width: 100%; 
             box-sizing: border-box; 
             padding: 15px; 
-            border-radius: 8px; 
-            border: 1px solid #30363d; 
-            background: #010409; 
+            border-radius: 10px; 
+            border: 2px solid #6272a4; 
+            background: #191a21; 
             color: white; 
             margin-bottom: 20px; 
             font-size: 14px; 
-            outline: none;
+            font-family: 'Nunito', sans-serif;
         }
-        input[type="text"]:focus { border-color: #58a6ff; }
+        input[type="text"]:focus { outline: none; border-color: #50fa7b; }
         
         .btn-lanzar { 
-            background-color: #238636; 
-            color: white; 
+            background-color: #50fa7b; 
+            color: #282a36; 
             border: none; 
             padding: 16px; 
-            border-radius: 8px; 
+            border-radius: 10px; 
             font-size: 18px; 
-            font-weight: bold; 
+            font-weight: 900; 
             width: 100%; 
             cursor: pointer; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
-            transition: transform 0.1s, background-color 0.2s; 
+            box-shadow: 4px 4px 0px #218c41; 
+            transition: transform 0.1s; 
+            font-family: 'Nunito', sans-serif;
         }
-        .btn-lanzar:active { transform: scale(0.97); background-color: #2ea043; }
+        .btn-lanzar:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #218c41; }
         
         .memory-card { 
-            background: #1c2128; 
-            border-radius: 12px; 
+            background: #282a36; 
+            border-radius: 15px; 
             padding: 20px; 
             width: 100%; 
             max-width: 400px; 
-            border-left: 5px solid #d73a49; 
+            border-left: 8px solid #ff5555; 
             box-sizing: border-box;
+            box-shadow: 4px 4px 10px rgba(0,0,0,0.3);
         }
-        .memory-card h3 { margin-top: 0; margin-bottom: 15px; color: #ffcc00; font-size: 16px; display: flex; align-items: center; gap: 8px;}
-        .cita-item { padding: 12px; background: #0d1117; border-radius: 6px; font-size: 13px; color: #8b949e; border: 1px solid #30363d; text-align: center; font-style: italic;}
+        .memory-card h3 { margin-top: 0; color: #f1fa8c; font-size: 18px; font-weight: 900; transform: rotate(-1deg);}
+        .cita-item { padding: 12px; background: #191a21; border-radius: 8px; font-size: 14px; color: #f8f8f2; border: 1px dashed #6272a4; text-align: center; }
+
+        .btn-volver { background: none; border: none; color: #ff79c6; text-decoration: underline; cursor: pointer; margin-bottom: 15px; font-family: 'Nunito', sans-serif; font-weight: bold;}
     </style>
 </head>
 <body>
@@ -86,53 +132,77 @@
         <p>SALA VIP EXCLUSIVA</p>
     </div>
 
-    <div class="card">
-        <label for="link-pelicula">URL del Capítulo a ver:</label>
-        <input type="text" id="link-pelicula" placeholder="Pega el link de Disney+ aquí...">
-        <button class="btn-lanzar" onclick="lanzarCita()">Entrar a la Cita 🚀</button>
+    <div class="card" id="seleccion-perfil">
+        <h2 style="text-align: center; color: white; margin-top: 0; font-size: 18px;">¿Quién eres? 👀</h2>
+        <div class="perfiles">
+            <button class="perfil-btn" onclick="seleccionarPerfil('liz')">👑 Liz</button>
+            <button class="perfil-btn" style="border-color: #ff79c6; box-shadow: 4px 4px 0px #ff79c6;" onclick="seleccionarPerfil('sofi')">✨ Sofi</button>
+        </div>
+    </div>
+
+    <div class="card" id="zona-liz">
+        <button class="btn-volver" onclick="volverInicio()">← Cambiar perfil</button>
+        <label>Pegar URL del Capítulo:</label>
+        <input type="text" id="link-pelicula" placeholder="https://disneyplus.com/...">
+        <button class="btn-lanzar" onclick="lanzarCitaLiz()">Preparar Sala 🚀</button>
+    </div>
+
+    <div class="card" id="zona-sofi">
+        <button class="btn-volver" onclick="volverInicio()">← Cambiar perfil</button>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <p style="color: #8be9fd; font-weight: bold;">Estado de la sala:</p>
+            <p id="estado-sala-sofi" style="color: #ffb86c; font-style: italic;">Esperando a que Liz ponga el link... 🥺</p>
+        </div>
+        <button class="btn-lanzar" style="background: #6272a4; box-shadow: 4px 4px 0px #44475a; cursor: not-allowed;" id="btn-entrar-sofi">Entrar a la Cita ✨</button>
     </div>
 
     <div class="memory-card">
         <h3>🗂️ Memory Card</h3>
         <div id="lista-citas">
-            <div class="cita-item">Aquí conectaremos Firebase para guardar el historial de sus citas...</div>
+            <div class="cita-item">Aquí aparecerán todas sus citas de cine cuando conectemos Firebase... 💖</div>
         </div>
     </div>
 
     <script>
-        function lanzarCita() {
+        function seleccionarPerfil(perfil) {
+            document.getElementById('seleccion-perfil').style.display = 'none';
+            if(perfil === 'liz') {
+                document.getElementById('zona-liz').style.display = 'block';
+            } else {
+                document.getElementById('zona-sofi').style.display = 'block';
+            }
+        }
+
+        function volverInicio() {
+            document.getElementById('seleccion-perfil').style.display = 'block';
+            document.getElementById('zona-liz').style.display = 'none';
+            document.getElementById('zona-sofi').style.display = 'none';
+        }
+
+        function lanzarCitaLiz() {
             const inputLink = document.getElementById('link-pelicula').value.trim();
-            
-            if (!inputLink) {
-                alert("⚠️ ¡Líder, necesitas pegar el link de la película primero!");
+            if (!inputLink || !inputLink.includes('disneyplus.com')) {
+                alert("⚠️ ¡Líder, necesitas pegar un link válido de Disney+!");
                 return;
             }
             
-            if (!inputLink.includes('disneyplus.com')) {
-                alert("⚠️ Ese no parece un link válido de Disney+");
-                return;
-            }
-            
-            // Limpia el link de cualquier parámetro basura que traiga por defecto
             const urlBase = inputLink.split('?')[0];
-            
-            // Inyecta nuestra sala maestra
             const linkMagico = urlBase + "?sala=monkeycine";
             
-            // Forzamos la redirección en la misma pestaña
+            // Más adelante, aquí guardaremos el link en Firebase en vez de saltar directo
             window.location.href = linkMagico;
         }
+
         // ==========================================
         // REGISTRO DEL SERVICE WORKER (Para Modo App)
         // ==========================================
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
-                    .then((reg) => console.log('Service Worker registrado', reg))
-                    .catch((err) => console.log('Error en Service Worker', err));
+                    .then((reg) => console.log('SW registrado'))
+                    .catch((err) => console.log('Error SW', err));
             });
         }
     </script>
-
 </body>
 </html>
