@@ -104,7 +104,7 @@
         <button class="btn-volver" onclick="volverInicio()">← Cambiar perfil</button>
         <label>Pegar URL del Capítulo:</label>
         <input type="text" id="link-pelicula" placeholder="https://disneyplus.com/...">
-        <button class="btn-lanzar" onclick="prepararSalaLiz()">Preparar Sala 🚀</button>
+        <button class="btn-lanzar" id="btn-preparar-liz" onclick="prepararSalaLiz()">Preparar Sala 🚀</button>
     </div>
 
     <div class="card" id="zona-sofi">
@@ -127,7 +127,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-        // Tus llaves exactas
         const firebaseConfig = {
             apiKey: "AIzaSyD5L51DKMU8ozgN8wTt9WATlgzjI7lQ2Ls",
             authDomain: "monkeycine.firebaseapp.com",
@@ -175,17 +174,14 @@
                 const estadoSofi = document.getElementById('estado-sala-sofi');
                 
                 if(btnSofi && estadoSofi) {
-                    // Encender botón de Sofi
                     btnSofi.style.background = '#50fa7b';
                     btnSofi.style.boxShadow = '4px 4px 0px #218c41';
                     btnSofi.style.cursor = 'pointer';
                     btnSofi.disabled = false;
                     
-                    // Cambiar texto
                     estadoSofi.style.color = '#50fa7b';
                     estadoSofi.textContent = "¡Liz ya preparó la peli! 🍿";
                     
-                    // Lanzar notificación si está en perfil Sofi
                     if (document.getElementById('zona-sofi').style.display === 'block') {
                         if ("Notification" in window && Notification.permission === "granted") {
                             new Notification("¡Monkeycine Listo! 🍿", { body: "Liz acaba de encender la sala. ¡Entra ya!" });
@@ -196,24 +192,48 @@
         });
 
         // =========================================
-        // BOTÓN LIZ: GUARDAR Y ABRIR LEMUR
+        // BOTÓN LIZ: GUARDAR Y CONFIRMAR (SIN SALTO)
         // =========================================
         window.prepararSalaLiz = function() {
             const inputLink = document.getElementById('link-pelicula').value.trim();
+            const btnLiz = document.getElementById('btn-preparar-liz');
+
             if (!inputLink || !inputLink.includes('disneyplus.com')) {
                 alert("⚠️ ¡Líder, necesitas pegar un link válido de Disney+!");
                 return;
             }
             
+            // UX: Aviso visual de que estamos procesando
+            btnLiz.textContent = "⏳ Enviando...";
+            btnLiz.style.background = "#f1fa8c";
+            btnLiz.style.color = "#282a36";
+            btnLiz.disabled = true;
+
             const urlBase = inputLink.split('?')[0];
             const linkMagico = urlBase + "?sala=monkeycine";
             
-            // Subir a Firebase
+            // Subir a Firebase con validación real
             set(ref(db, 'cita_actual'), { url: linkMagico }).then(() => {
-                // Y abrirle Lemur a Liz también
-                const linkSinHttps = linkMagico.replace("https://", "");
-                const urlLemur = `intent://${linkSinHttps}#Intent;scheme=https;package=com.lemurbrowser.exts;end;`;
-                window.location.href = urlLemur;
+                // Éxito: Le avisamos a Liz que ya está en la nube
+                btnLiz.textContent = "✅ ¡Sofi notificada!";
+                btnLiz.style.background = "#50fa7b";
+                
+                // Sin redireccionar. Reseteamos el botón a su estado normal después de 3 segundos
+                setTimeout(() => {
+                    btnLiz.textContent = "Preparar Sala 🚀";
+                    btnLiz.style.background = "#50fa7b";
+                    btnLiz.style.color = "#282a36";
+                    btnLiz.disabled = false;
+                }, 3000);
+
+            }).catch((error) => {
+                // Si Firebase falla (por reglas o internet), te avisa
+                alert("❌ Error de Firebase: No se pudo conectar a la nube. Revisa las reglas.");
+                console.error(error);
+                btnLiz.textContent = "Reintentar 🚀";
+                btnLiz.style.background = "#ff5555";
+                btnLiz.style.color = "white";
+                btnLiz.disabled = false;
             });
         }
 
@@ -221,7 +241,7 @@
         // BOTÓN SOFI: LEER Y ABRIR LEMUR
         // =========================================
         window.entrarSalaSofi = function() {
-            if (!linkMagicoActual) return; // Si el link está vacío, no hace nada
+            if (!linkMagicoActual) return;
             
             const linkSinHttps = linkMagicoActual.replace("https://", "");
             const urlLemur = `intent://${linkSinHttps}#Intent;scheme=https;package=com.lemurbrowser.exts;end;`;
