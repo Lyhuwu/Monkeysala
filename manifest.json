@@ -1,0 +1,15 @@
+{
+  "name": "Monkeycine VIP",
+  "short_name": "Monkeycine",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d1117",
+  "theme_color": "#8957e5",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2809/2809794.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
