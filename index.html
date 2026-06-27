@@ -122,6 +122,16 @@
             // Forzamos la redirección en la misma pestaña
             window.location.href = linkMagico;
         }
+        // ==========================================
+        // REGISTRO DEL SERVICE WORKER (Para Modo App)
+        // ==========================================
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then((reg) => console.log('Service Worker registrado', reg))
+                    .catch((err) => console.log('Error en Service Worker', err));
+            });
+        }
     </script>
 
 </body>
