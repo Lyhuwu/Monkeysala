@@ -69,6 +69,20 @@
         .btn-lanzar:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #218c41; }
         
         .btn-volver { background: none; border: none; color: #ff79c6; text-decoration: underline; cursor: pointer; margin-bottom: 15px; font-weight: bold;}
+
+        /* Memory Card intacta */
+        .memory-card { 
+            background: #282a36; 
+            border-radius: 15px; 
+            padding: 20px; 
+            width: 100%; 
+            max-width: 400px; 
+            border-left: 8px solid #ff5555; 
+            box-sizing: border-box;
+            box-shadow: 4px 4px 10px rgba(0,0,0,0.3);
+        }
+        .memory-card h3 { margin-top: 0; color: #f1fa8c; font-size: 18px; font-weight: 900; transform: rotate(-1deg);}
+        .cita-item { padding: 12px; background: #191a21; border-radius: 8px; font-size: 14px; color: #f8f8f2; border: 1px dashed #6272a4; text-align: center; }
     </style>
 </head>
 <body>
@@ -102,13 +116,26 @@
         <button class="btn-lanzar" id="btn-entrar-sofi" onclick="lanzarCita()">Entrar a la Cita ✨</button>
     </div>
 
+    <div class="memory-card">
+        <h3>🗂️ Memory Card</h3>
+        <div id="lista-citas">
+            <div class="cita-item">Aquí aparecerán todas sus citas de cine cuando conectemos Firebase... 💖</div>
+        </div>
+    </div>
+
     <script>
         function seleccionarPerfil(perfil) {
             document.getElementById('seleccion-perfil').style.display = 'none';
+            
             if(perfil === 'liz') {
                 document.getElementById('zona-liz').style.display = 'block';
             } else {
                 document.getElementById('zona-sofi').style.display = 'block';
+                
+                // NUEVO: Pedir permisos de notificación al celular de Sofi
+                if ("Notification" in window && Notification.permission !== "granted") {
+                    Notification.requestPermission();
+                }
             }
         }
 
@@ -119,14 +146,13 @@
         }
 
         function lanzarCita() {
-            // Obtener el link de Liz o el valor predeterminado si no se ha configurado Firebase aún
             let inputLink = document.getElementById('link-pelicula') ? document.getElementById('link-pelicula').value.trim() : "";
             if (inputLink === "") inputLink = "https://www.disneyplus.com/es-mx/play/85fdb4a9"; 
             
             const urlBase = inputLink.split('?')[0];
             const linkMagico = urlBase + "?sala=monkeycine";
             
-            // Lógica de apertura forzada en Lemur
+            // Lógica de apertura forzada en Lemur Browser
             const linkSinHttps = linkMagico.replace("https://", "");
             const urlLemur = `intent://${linkSinHttps}#Intent;scheme=https;package=com.lemurbrowser.exts;end;`;
             
