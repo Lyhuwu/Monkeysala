@@ -13,122 +13,163 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Referencias en Firebase
-const linkRef = ref(db, 'sala_estado/link_actual');
-const peticionRef = ref(db, 'sala_estado/solicitud');
+// Referencias Firebase
+const salaEstadoRef = ref(db, 'sala_en_vivo'); 
+const zumbidoRef = ref(db, 'notificaciones/zumbido');
 const abachosRef = ref(db, 'estadisticas/total_abachos');
 const pelisRef = ref(db, 'estadisticas/total_peliculas');
 const momentosRef = ref(db, 'momentos_guardados');
 
-// Variables de UI
 let miIdentidad = localStorage.getItem('monkey_identidad'); 
 
+// Inicialización
 window.addEventListener('DOMContentLoaded', () => {
+    configurarRouterSPA(); // Activa el cambio de pestañas
+
     if (!miIdentidad) {
-        document.getElementById('pantalla-identidad').style.display = 'flex';
+        document.getElementById('modal-identidad').style.display = 'flex';
     } else {
-        iniciarApp();
+        arrancarApp();
     }
 
     document.getElementById('btn-soy-liz').addEventListener('click', () => {
         localStorage.setItem('monkey_identidad', 'liz');
         miIdentidad = 'liz';
-        iniciarApp();
+        arrancarApp();
     });
 
     document.getElementById('btn-soy-sofi').addEventListener('click', () => {
         localStorage.setItem('monkey_identidad', 'sofi');
         miIdentidad = 'sofi';
-        iniciarApp();
+        arrancarApp();
     });
 });
 
-function iniciarApp() {
-    document.getElementById('pantalla-identidad').style.display = 'none';
-    document.getElementById('app-principal').style.display = 'block';
+// Sistema de Pestañas (Sin recargar página)
+function configurarRouterSPA() {
+    const botonesNav = document.querySelectorAll('.nav-item');
+    const vistas = document.querySelectorAll('.vista');
 
-    if (miIdentidad === 'liz') {
-        document.getElementById('txt-bienvenida').textContent = "👩🏻‍💻 Arquitecta de la Matrix";
-        document.getElementById('panel-liz').style.display = 'block';
-        configurarPanelLiz();
-    } else {
-        document.getElementById('txt-bienvenida').textContent = "✨ Bienvenida, dueña del cine";
-        document.getElementById('panel-sofi').style.display = 'block';
-        configurarPanelSofi();
-    }
+    botonesNav.forEach(boton => {
+        boton.addEventListener('click', (e) => {
+            const targetId = e.currentTarget.getAttribute('data-target');
+            
+            botonesNav.forEach(b => b.classList.remove('activo'));
+            e.currentTarget.classList.add('activo');
 
-    cargarEstadisticas();
+            vistas.forEach(vista => {
+                if (vista.id === targetId) {
+                    vista.classList.remove('oculta');
+                    vista.classList.add('activa');
+                } else {
+                    vista.classList.remove('activa');
+                    vista.classList.add('oculta');
+                }
+            });
+            if(navigator.vibrate) navigator.vibrate(40);
+        });
+    });
 }
 
-function configurarPanelLiz() {
-    const btnEnviar = document.getElementById('btn-enviar-link');
+function arrancarApp() {
+    document.getElementById('modal-identidad').style.display = 'none';
+    document.getElementById('app-container').style.display = 'flex';
+
+    if (miIdentidad === 'liz') {
+        document.getElementById('txt-identidad').textContent = "👩🏻‍💻 Liz";
+        document.getElementById('panel-liz').style.display = 'block';
+        logicaLider();
+    } else {
+        document.getElementById('txt-identidad').textContent = "✨ Sofi";
+        document.getElementById('panel-sofi').style.display = 'block';
+        logicaInvitada();
+    }
+
+    cargarRecuerdos();
+}
+
+// 🎬 LÓGICA DE SALA: LIZ (Transmisora)
+function logicaLider() {
+    const btnAbrir = document.getElementById('btn-abrir-sala');
     const inputLink = document.getElementById('input-link');
     const statusBox = document.getElementById('liz-status');
 
-    btnEnviar.addEventListener('click', () => {
+    btnAbrir.addEventListener('click', () => {
         const link = inputLink.value.trim();
-        if (link !== "") {
-            set(linkRef, link);
-            statusBox.textContent = "✅ ¡Link enviado! Esperando a Sofi...";
+        if (link) {
+            // Guarda estado en vivo en Firebase
+            set(salaEstadoRef, { activa: true, link: link, timestamp: Date.now() });
+            statusBox.textContent = "🟢 Transmitiendo. Esperando a Sofi...";
+            statusBox.style.color = "#50fa7b";
             inputLink.value = "";
-            set(peticionRef, null);
         }
     });
 
-    // Escuchar si Sofi pide link
-    onValue(peticionRef, (snapshot) => {
+    // Escuchar zumbidos de Sofi
+    onValue(zumbidoRef, (snapshot) => {
         if (snapshot.val()) {
-            statusBox.textContent = "🔔 ¡Sofi está pidiendo link para ver peli!";
+            statusBox.textContent = "🔔 ¡Sofi quiere ver peli! Abre la sala.";
             statusBox.style.color = "#ff79c6";
             if(navigator.vibrate) navigator.vibrate([300, 100, 300]);
         }
     });
 
-    // Si Sofi entró, el link se borra de firebase y avisamos a Liz
-    onValue(linkRef, (snapshot) => {
-        if (!snapshot.val() && statusBox.textContent.includes("Esperando")) {
-            statusBox.textContent = "🚀 Sofi ha entrado a la sala.";
-            statusBox.style.color = "#50fa7b";
+    // Si la sala se desactiva (Sofi entró y consumió el link)
+    onValue(salaEstadoRef, (snapshot) => {
+        const estado = snapshot.val();
+        if (!estado || !estado.activa) {
+            if (statusBox.textContent.includes("Transmitiendo")) {
+                statusBox.textContent = "🚀 ¡Sofi ha entrado al cine!";
+                statusBox.style.color = "#8be9fd";
+            }
         }
     });
 }
 
-function configurarPanelSofi() {
-    const btnPedir = document.getElementById('btn-pedir-link');
-    const btnEntrar = document.getElementById('btn-entrar-sala');
-    const statusBox = document.getElementById('sofi-status-espera');
-    let linkActivo = "";
+// 🍿 LÓGICA DE SALA: SOFI (Receptora)
+function logicaInvitada() {
+    const btnZumbido = document.getElementById('btn-zumbido');
+    const btnEntrar = document.getElementById('btn-entrar-peli');
+    const divCerrado = document.getElementById('sofi-estado-cerrado');
+    const divAbierto = document.getElementById('sofi-estado-abierto');
+    let linkActual = "";
 
-    btnPedir.addEventListener('click', () => {
-        set(peticionRef, Date.now());
-        btnPedir.textContent = "✅ Solicitud enviada";
-        setTimeout(() => btnPedir.textContent = "🛎️ Solicitar Link", 3000);
+    // Mandar alerta a Liz
+    btnZumbido.addEventListener('click', () => {
+        set(zumbidoRef, Date.now());
+        btnZumbido.textContent = "✅ Avisado";
+        setTimeout(() => btnZumbido.textContent = "🔔 Mandar Zumbido a Liz", 3000);
     });
 
-    // Escuchar si Liz pone un link
-    onValue(linkRef, (snapshot) => {
-        linkActivo = snapshot.val();
-        if (linkActivo) {
-            statusBox.style.display = 'none';
-            btnEntrar.style.display = 'block';
-            if(navigator.vibrate) navigator.vibrate([500]); // Vibra cuando llega el link
+    // Escuchar si Liz abre la sala
+    onValue(salaEstadoRef, (snapshot) => {
+        const estado = snapshot.val();
+        if (estado && estado.activa && estado.link) {
+            linkActual = estado.link;
+            divCerrado.style.display = 'none';
+            divAbierto.style.display = 'block';
+            if(navigator.vibrate) navigator.vibrate([500]); 
         } else {
-            statusBox.style.display = 'block';
-            btnEntrar.style.display = 'none';
+            divCerrado.style.display = 'block';
+            divAbierto.style.display = 'none';
         }
     });
 
+    // Entrar y consumir el link
     btnEntrar.addEventListener('click', () => {
-        if (linkActivo) {
-            window.open(linkActivo, '_blank');
-            set(linkRef, null);
+        if (linkActual) {
+            window.open(linkActual, '_blank');
+            // Al entrar, apagamos la sala para que no se quede encendida por siempre
+            set(salaEstadoRef, { activa: false, link: null });
+            set(zumbidoRef, null); 
         }
     });
 }
 
-function cargarEstadisticas() {
-    onValue(abachosRef, (s) => document.getElementById('hub-abachos-counter').textContent = s.val() || 0);
-    onValue(pelisRef, (s) => document.getElementById('hub-pelis-counter').textContent = s.val() || 0);
+// ✨ CARGAR ESTADÍSTICAS Y MOMENTOS
+function cargarRecuerdos() {
+    onValue(abachosRef, (s) => document.getElementById('hub-abachos').textContent = s.val() || 0);
+    onValue(pelisRef, (s) => document.getElementById('hub-pelis').textContent = s.val() || 0);
 
     onValue(momentosRef, (snapshot) => {
         const grid = document.getElementById('hub-momentos-grid');
@@ -136,39 +177,31 @@ function cargarEstadisticas() {
         const datos = snapshot.val();
         
         if (datos) {
-            const momentosArray = Object.values(datos).reverse();
-            momentosArray.forEach(momento => {
-                const fecha = new Date(momento.fecha).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+            const array = Object.values(datos).reverse();
+            array.forEach(m => {
+                const fecha = new Date(m.fecha).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' });
                 const card = document.createElement('div');
                 card.className = 'momento-card';
                 
-                let htmlNota = momento.mensaje ? `<div class="momento-nota">" ${momento.mensaje} "</div>` : '';
+                let htmlNota = m.mensaje ? `<div class="momento-nota">"${m.mensaje}"</div>` : '';
                 
                 card.innerHTML = `
-                    <div class="momento-peli">🎬 ${momento.pelicula}</div>
-                    <div class="momento-detalles"><span>⏱️ ${momento.tiempo}</span><span>📅 ${fecha}</span></div>
+                    <div style="font-weight:900; font-size:15px; color:#f8f8f2;">🎬 ${m.pelicula}</div>
+                    <div style="display:flex; justify-content:space-between; font-size:12px; color:#8b949e; margin-top:4px;">
+                        <span>⏱️ ${m.tiempo}</span> <span>📅 ${fecha}</span>
+                    </div>
                     ${htmlNota}
-                    <div style="text-align: right; margin-top: 5px; font-size: 10px; color: #6272a4;">Guardado por ${momento.usuario}</div>
+                    <div style="text-align:right; font-size:10px; color:#6272a4; margin-top:6px;">Por ${m.usuario}</div>
                 `;
                 grid.appendChild(card);
             });
-        } else {
-            grid.innerHTML = '<p style="color:#8b949e; text-align:center;">Aún no hay momentos guardados.</p>';
         }
     });
 }
 
-// ==========================================
-// REGISTRO DEL SERVICE WORKER (Para instalar como App)
-// ==========================================
+// Registro Service Worker (Para PWA)
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-            .then(registro => {
-                console.log('⚙️ Service Worker registrado con éxito. ¡App instalable!');
-            })
-            .catch(error => {
-                console.error('❌ Error al registrar el Service Worker:', error);
-            });
+        navigator.serviceWorker.register('./sw.js').catch(err => console.error(err));
     });
 }
