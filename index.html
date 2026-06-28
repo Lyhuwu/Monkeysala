@@ -8,46 +8,87 @@
     <title>MonkeyHub 🐵</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
-    <header class="app-header">
-        <h1>MonkeyHub 🐵</h1>
-    </header>
+    <div id="modal-identidad" class="modal-activa">
+        <h2 style="margin-bottom: 30px;">¿Quién eres? 👀</h2>
+        <button id="btn-soy-liz" class="btn-perfil" style="background:#8be9fd; color:#282a36;">Soy Liz 👩🏻‍💻</button>
+        <button id="btn-soy-sofi" class="btn-perfil" style="background:#ff79c6; color:#282a36;">Soy Sofi ✨</button>
+    </div>
 
-    <main id="app-content">
+    <div id="app-container" style="display: none;">
         
-        <section id="vista-inicio" class="vista-activa">
-            <h2 class="section-title">Resumen</h2>
-            <div class="tarjeta-premium stat-card">
-                <span class="stat-numero">14</span>
-                <span class="stat-label">Monkey Abrazos</span>
-            </div>
+        <header class="app-header">
+            <h1>MonkeyHub 🐵</h1>
+            <span id="txt-identidad" class="badge-identidad"></span>
+        </header>
+
+        <main id="vistas-container">
+            
+            <section id="vista-sala" class="vista activa">
+                
+                <div id="panel-liz" style="display: none;" class="tarjeta-premium">
+                    <h3 style="color:#8be9fd; margin-top:0;">Transmisión VIP 🚀</h3>
+                    <p style="color:#8b949e; font-size: 13px;">Pega el link de la película para abrir la sala y notificar a Sofi.</p>
+                    <input type="url" id="input-link" placeholder="Link de Disney+...">
+                    <button id="btn-abrir-sala" class="btn-accion">Encender Sala</button>
+                    <div id="liz-status" class="status-texto">Sala cerrada.</div>
+                </div>
+
+                <div id="panel-sofi" style="display: none;" class="tarjeta-premium">
+                    
+                    <div id="sofi-estado-cerrado" style="text-align: center;">
+                        <h3 style="color:#8b949e; margin-top:0;">La sala está cerrada 💤</h3>
+                        <p style="color:#6272a4; font-size: 13px; margin-bottom: 20px;">Liz está preparando todo en la matriz.</p>
+                        <button id="btn-zumbido" class="btn-secundario">🔔 Mandar Zumbido a Liz</button>
+                    </div>
+
+                    <div id="sofi-estado-abierto" style="display: none; text-align: center;">
+                        <div class="indicador-en-vivo">🔴 EN VIVO</div>
+                        <h3 style="color:#50fa7b;">¡Liz te está esperando! 🍿</h3>
+                        <p style="color:#8b949e; font-size: 13px;">La sala VIP está abierta y lista.</p>
+                        <button id="btn-entrar-peli" class="btn-accion latido">▶️ Entrar a la Sala</button>
+                    </div>
+                </div>
+
             </section>
 
-        <section id="vista-historial" class="vista-oculta">
-            <h2 class="section-title">Tus Memorias</h2>
-            <div class="tarjeta-premium sesion-card">
-                <h3>🎬 Inside Out 2</h3>
-                <p>⏱ 2 h 14 min • 🤗 14 Abrazos</p>
-            </div>
-        </section>
+            <section id="vista-recuerdos" class="vista oculta">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-emoji">🫂</span>
+                        <span class="stat-label">Abachos</span>
+                        <span id="hub-abachos" class="stat-num">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-emoji">🍿</span>
+                        <span class="stat-label">Películas</span>
+                        <span id="hub-pelis" class="stat-num">0</span>
+                    </div>
+                </div>
 
-        <section id="vista-perfil" class="vista-oculta">
-            <h2 class="section-title">Perfil</h2>
-            <div class="tarjeta-premium">
-                <h3>Estadísticas Globales</h3>
-            </div>
-        </section>
+                <h3 style="color: #ff79c6; margin-top: 25px;">📸 Cápsulas del Tiempo</h3>
+                <div id="hub-momentos-grid" class="momentos-grid">
+                    </div>
+            </section>
 
-    </main>
+        </main>
 
-    <nav class="bottom-nav">
-        <button class="nav-item activo" data-target="vista-inicio">🏠<br><span>Inicio</span></button>
-        <button class="nav-item" data-target="vista-historial">🎞️<br><span>Historial</span></button>
-        <button class="nav-item" data-target="vista-perfil">👤<br><span>Perfil</span></button>
-    </nav>
+        <nav class="bottom-nav">
+            <button class="nav-item activo" data-target="vista-sala">
+                <span class="nav-icon">🎬</span>
+                <span>Cine</span>
+            </button>
+            <button class="nav-item" data-target="vista-recuerdos">
+                <span class="nav-icon">✨</span>
+                <span>Recuerdos</span>
+            </button>
+        </nav>
 
-    <script src="router.js"></script>
+    </div>
+
+    <script type="module" src="hub.js"></script>
 </body>
 </html>
