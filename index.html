@@ -8,62 +8,46 @@
     <title>MonkeyHub 🐵</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
-    
-    <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
-    <div id="pantalla-identidad" class="modal-identidad">
-        <h2>¿Quién eres? 👀</h2>
-        <button id="btn-soy-liz" class="btn-perfil">Soy Liz 👩🏻‍💻</button>
-        <button id="btn-soy-sofi" class="btn-perfil" style="background:#ff79c6; color:#282a36;">Soy Sofi ✨</button>
-    </div>
+    <header class="app-header">
+        <h1>MonkeyHub 🐵</h1>
+    </header>
 
-    <div id="app-principal" style="display: none;">
+    <main id="app-content">
         
-        <header class="hub-header">
-            <h1>MonkeyHub 🐵</h1>
-            <span id="txt-bienvenida" style="color: #8b949e; font-size: 14px;"></span>
-        </header>
-
-        <div id="zona-control" class="seccion-destacada">
-            <div id="panel-liz" style="display: none;">
-                <h3 style="margin-top: 0; color:#8be9fd;">Lanzador de Películas 🚀</h3>
-                <input type="url" id="input-link" placeholder="Pega el link de Disney+ aquí...">
-                <button id="btn-enviar-link" class="btn-accion">Enviar a Sofi</button>
-                <div id="liz-status" class="status-texto"></div>
+        <section id="vista-inicio" class="vista-activa">
+            <h2 class="section-title">Resumen</h2>
+            <div class="tarjeta-premium stat-card">
+                <span class="stat-numero">14</span>
+                <span class="stat-label">Monkey Abrazos</span>
             </div>
+            </section>
 
-            <div id="panel-sofi" style="display: none; text-align: center;">
-                <h3 style="margin-top: 0; color:#ff79c6;">Cine VIP 🍿</h3>
-                <div id="sofi-status-espera" class="status-texto">💤 Esperando link...</div>
-                
-                <button id="btn-pedir-link" class="btn-accion" style="background: #f1fa8c; color: #282a36; margin-bottom: 10px;">🛎️ Solicitar Link</button>
-                <button id="btn-entrar-sala" class="btn-accion animacion-latido" style="display: none; background: #50fa7b; color: #282a36; font-size: 18px;">▶️ Entrar a la Sala</button>
+        <section id="vista-historial" class="vista-oculta">
+            <h2 class="section-title">Tus Memorias</h2>
+            <div class="tarjeta-premium sesion-card">
+                <h3>🎬 Inside Out 2</h3>
+                <p>⏱ 2 h 14 min • 🤗 14 Abrazos</p>
             </div>
-        </div>
+        </section>
 
-        <div class="monkey-stats-container">
-            <div class="stat-card">
-                <span class="stat-emoji">🫂</span>
-                <span class="stat-title">Abachos</span>
-                <span id="hub-abachos-counter" class="stat-number">...</span>
+        <section id="vista-perfil" class="vista-oculta">
+            <h2 class="section-title">Perfil</h2>
+            <div class="tarjeta-premium">
+                <h3>Estadísticas Globales</h3>
             </div>
-            <div class="stat-card">
-                <span class="stat-emoji">🍿</span>
-                <span class="stat-title">Películas</span>
-                <span id="hub-pelis-counter" class="stat-number">...</span>
-            </div>
-        </div>
+        </section>
 
-        <div class="monkey-momentos-section">
-            <h3 style="color: #ff79c6; text-align: center;">📸 Momentos Inolvidables</h3>
-            <div id="hub-momentos-grid" class="momentos-grid">
-                </div>
-        </div>
+    </main>
 
-    </div>
+    <nav class="bottom-nav">
+        <button class="nav-item activo" data-target="vista-inicio">🏠<br><span>Inicio</span></button>
+        <button class="nav-item" data-target="vista-historial">🎞️<br><span>Historial</span></button>
+        <button class="nav-item" data-target="vista-perfil">👤<br><span>Perfil</span></button>
+    </nav>
 
-    <script type="module" src="hub.js"></script>
+    <script src="router.js"></script>
 </body>
 </html>
