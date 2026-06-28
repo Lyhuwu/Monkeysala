@@ -3,259 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Monkeycine VIP</title>
-    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>MonkeyHub 🐵</title>
+    <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     
-    <style>
-        body { 
-            background-color: #1a1a24; 
-            color: #e2e8f0; 
-            font-family: 'Nunito', sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 20px; 
-            margin: 0; 
-            min-height: 100vh;
-            background-image: radial-gradient(#30363d 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-        
-        .header { text-align: center; margin-bottom: 30px; position: relative; }
-        .header h1 { 
-            color: #bfa3ff; font-size: 3em; margin: 0; font-weight: 900;
-            text-shadow: 3px 3px 0px #6b21a8, -1px -1px 0px #000;
-            transform: rotate(-2deg);
-        }
-        .header p { 
-            background: #ff79c6; color: #282a36; display: inline-block; 
-            padding: 4px 12px; border-radius: 20px; font-weight: 900; 
-            font-size: 14px; transform: rotate(3deg); border: 2px dashed #282a36;
-        }
-        
-        .card { 
-            background: #282a36; border: 3px dashed #6272a4; 
-            border-radius: 15px; padding: 25px 20px; width: 100%; 
-            max-width: 400px; box-shadow: 8px 8px 0px rgba(0,0,0,0.4); 
-            margin-bottom: 25px; box-sizing: border-box;
-        }
-
-        .perfiles { display: flex; gap: 15px; justify-content: center; }
-        .perfil-btn {
-            background: #44475a; border: 2px solid #bd93f9; color: white;
-            padding: 15px 20px; border-radius: 12px; font-size: 18px;
-            font-weight: bold; cursor: pointer; flex: 1;
-            transition: transform 0.2s; box-shadow: 4px 4px 0px #bd93f9;
-        }
-        .perfil-btn:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #bd93f9; }
-
-        #zona-liz, #zona-sofi { display: none; }
-        
-        label { font-size: 14px; color: #8be9fd; font-weight: bold; margin-bottom: 8px; display: block; }
-        input[type="text"] { 
-            width: 100%; box-sizing: border-box; padding: 15px; 
-            border-radius: 10px; border: 2px solid #6272a4; 
-            background: #191a21; color: white; margin-bottom: 20px; 
-            font-size: 14px; font-family: 'Nunito', sans-serif;
-        }
-        
-        .btn-lanzar { 
-            background-color: #50fa7b; color: #282a36; border: none; 
-            padding: 16px; border-radius: 10px; font-size: 18px; 
-            font-weight: 900; width: 100%; cursor: pointer; 
-            box-shadow: 4px 4px 0px #218c41; transition: transform 0.1s; 
-        }
-        .btn-lanzar:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px #218c41; }
-        
-        .btn-volver { background: none; border: none; color: #ff79c6; text-decoration: underline; cursor: pointer; margin-bottom: 15px; font-weight: bold;}
-
-        /* Memory Card intacta */
-        .memory-card { 
-            background: #282a36; 
-            border-radius: 15px; 
-            padding: 20px; 
-            width: 100%; 
-            max-width: 400px; 
-            border-left: 8px solid #ff5555; 
-            box-sizing: border-box;
-            box-shadow: 4px 4px 10px rgba(0,0,0,0.3);
-        }
-        .memory-card h3 { margin-top: 0; color: #f1fa8c; font-size: 18px; font-weight: 900; transform: rotate(-1deg);}
-        .cita-item { padding: 12px; background: #191a21; border-radius: 8px; font-size: 14px; color: #f8f8f2; border: 1px dashed #6272a4; text-align: center; }
-    </style>
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
 
-    <div class="header">
-        <h1>🍿 Monkeycine</h1>
-        <p>SALA VIP EXCLUSIVA</p>
+    <div id="pantalla-identidad" class="modal-identidad">
+        <h2>¿Quién eres? 👀</h2>
+        <button id="btn-soy-liz" class="btn-perfil">Soy Liz 👩🏻‍💻</button>
+        <button id="btn-soy-sofi" class="btn-perfil" style="background:#ff79c6; color:#282a36;">Soy Sofi ✨</button>
     </div>
 
-    <div class="card" id="seleccion-perfil">
-        <h2 style="text-align: center; color: white; margin-top: 0; font-size: 18px;">¿Quién eres? 👀</h2>
-        <div class="perfiles">
-            <button class="perfil-btn" onclick="seleccionarPerfil('liz')">👑 Liz</button>
-            <button class="perfil-btn" style="border-color: #ff79c6; box-shadow: 4px 4px 0px #ff79c6;" onclick="seleccionarPerfil('sofi')">✨ Sofi</button>
-        </div>
-    </div>
+    <div id="app-principal" style="display: none;">
+        
+        <header class="hub-header">
+            <h1>MonkeyHub 🐵</h1>
+            <span id="txt-bienvenida" style="color: #8b949e; font-size: 14px;"></span>
+        </header>
 
-    <div class="card" id="zona-liz">
-        <button class="btn-volver" onclick="volverInicio()">← Cambiar perfil</button>
-        <label>Pegar URL del Capítulo:</label>
-        <input type="text" id="link-pelicula" placeholder="https://disneyplus.com/...">
-        <button class="btn-lanzar" id="btn-preparar-liz" onclick="prepararSalaLiz()">Preparar Sala 🚀</button>
-    </div>
+        <div id="zona-control" class="seccion-destacada">
+            <div id="panel-liz" style="display: none;">
+                <h3 style="margin-top: 0; color:#8be9fd;">Lanzador de Películas 🚀</h3>
+                <input type="url" id="input-link" placeholder="Pega el link de Disney+ aquí...">
+                <button id="btn-enviar-link" class="btn-accion">Enviar a Sofi</button>
+                <div id="liz-status" class="status-texto"></div>
+            </div>
 
-    <div class="card" id="zona-sofi">
-        <button class="btn-volver" onclick="volverInicio()">← Cambiar perfil</button>
-        <div style="text-align: center; margin-bottom: 20px;">
-            <p style="color: #8be9fd; font-weight: bold;">Estado de la sala:</p>
-            <p id="estado-sala-sofi" style="color: #ffb86c; font-style: italic;">Esperando a que Liz ponga el link... 🥺</p>
-        </div>
-        <button class="btn-lanzar" id="btn-entrar-sofi" onclick="entrarSalaSofi()" style="background: #6272a4; box-shadow: 4px 4px 0px #44475a; cursor: not-allowed;" disabled>Entrar a la Cita ✨</button>
-    </div>
-
-    <div class="memory-card">
-        <h3>🗂️ Memory Card</h3>
-        <div id="lista-citas">
-            <div class="cita-item">Historial de citas listo para conectarse... 💖</div>
-        </div>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyD5L51DKMU8ozgN8wTt9WATlgzjI7lQ2Ls",
-            authDomain: "monkeycine.firebaseapp.com",
-            projectId: "monkeycine",
-            storageBucket: "monkeycine.firebasestorage.app",
-            messagingSenderId: "134472914894",
-            appId: "1:134472914894:web:df59027eb99b5c05207d9f"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        let linkMagicoActual = "";
-
-        // =========================================
-        // LÓGICA DE PERFILES Y NOTIFICACIONES
-        // =========================================
-        window.seleccionarPerfil = function(perfil) {
-            document.getElementById('seleccion-perfil').style.display = 'none';
-            if(perfil === 'liz') {
-                document.getElementById('zona-liz').style.display = 'block';
-            } else {
-                document.getElementById('zona-sofi').style.display = 'block';
-                if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
-                    Notification.requestPermission();
-                }
-            }
-        }
-
-        window.volverInicio = function() {
-            document.getElementById('seleccion-perfil').style.display = 'block';
-            document.getElementById('zona-liz').style.display = 'none';
-            document.getElementById('zona-sofi').style.display = 'none';
-        }
-
-        // =========================================
-        // ESCUCHADOR DE FIREBASE (TELEPATÍA PARA SOFI)
-        // =========================================
-        const citaRef = ref(db, 'cita_actual');
-        onValue(citaRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data && data.url) {
-                linkMagicoActual = data.url;
+            <div id="panel-sofi" style="display: none; text-align: center;">
+                <h3 style="margin-top: 0; color:#ff79c6;">Cine VIP 🍿</h3>
+                <div id="sofi-status-espera" class="status-texto">💤 Esperando link...</div>
                 
-                const btnSofi = document.getElementById('btn-entrar-sofi');
-                const estadoSofi = document.getElementById('estado-sala-sofi');
-                
-                if(btnSofi && estadoSofi) {
-                    btnSofi.style.background = '#50fa7b';
-                    btnSofi.style.boxShadow = '4px 4px 0px #218c41';
-                    btnSofi.style.cursor = 'pointer';
-                    btnSofi.disabled = false;
-                    
-                    estadoSofi.style.color = '#50fa7b';
-                    estadoSofi.textContent = "¡Liz ya preparó la peli! 🍿";
-                    
-                    if (document.getElementById('zona-sofi').style.display === 'block') {
-                        if ("Notification" in window && Notification.permission === "granted") {
-                            new Notification("¡Monkeycine Listo! 🍿", { body: "Liz acaba de encender la sala. ¡Entra ya!" });
-                        }
-                    }
-                }
-            }
-        });
+                <button id="btn-pedir-link" class="btn-accion" style="background: #f1fa8c; color: #282a36; margin-bottom: 10px;">🛎️ Solicitar Link</button>
+                <button id="btn-entrar-sala" class="btn-accion animacion-latido" style="display: none; background: #50fa7b; color: #282a36; font-size: 18px;">▶️ Entrar a la Sala</button>
+            </div>
+        </div>
 
-        // =========================================
-        // BOTÓN LIZ: GUARDAR Y CONFIRMAR (SIN SALTO)
-        // =========================================
-        window.prepararSalaLiz = function() {
-            const inputLink = document.getElementById('link-pelicula').value.trim();
-            const btnLiz = document.getElementById('btn-preparar-liz');
+        <div class="monkey-stats-container">
+            <div class="stat-card">
+                <span class="stat-emoji">🫂</span>
+                <span class="stat-title">Abachos</span>
+                <span id="hub-abachos-counter" class="stat-number">...</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-emoji">🍿</span>
+                <span class="stat-title">Películas</span>
+                <span id="hub-pelis-counter" class="stat-number">...</span>
+            </div>
+        </div>
 
-            if (!inputLink || !inputLink.includes('disneyplus.com')) {
-                alert("⚠️ ¡Líder, necesitas pegar un link válido de Disney+!");
-                return;
-            }
-            
-            // UX: Aviso visual de que estamos procesando
-            btnLiz.textContent = "⏳ Enviando...";
-            btnLiz.style.background = "#f1fa8c";
-            btnLiz.style.color = "#282a36";
-            btnLiz.disabled = true;
+        <div class="monkey-momentos-section">
+            <h3 style="color: #ff79c6; text-align: center;">📸 Momentos Inolvidables</h3>
+            <div id="hub-momentos-grid" class="momentos-grid">
+                </div>
+        </div>
 
-            const urlBase = inputLink.split('?')[0];
-            const linkMagico = urlBase + "?sala=monkeycine";
-            
-            // Subir a Firebase con validación real
-            set(ref(db, 'cita_actual'), { url: linkMagico }).then(() => {
-                // Éxito: Le avisamos a Liz que ya está en la nube
-                btnLiz.textContent = "✅ ¡Sofi notificada!";
-                btnLiz.style.background = "#50fa7b";
-                
-                // Sin redireccionar. Reseteamos el botón a su estado normal después de 3 segundos
-                setTimeout(() => {
-                    btnLiz.textContent = "Preparar Sala 🚀";
-                    btnLiz.style.background = "#50fa7b";
-                    btnLiz.style.color = "#282a36";
-                    btnLiz.disabled = false;
-                }, 3000);
+    </div>
 
-            }).catch((error) => {
-                // Si Firebase falla (por reglas o internet), te avisa
-                alert("❌ Error de Firebase: No se pudo conectar a la nube. Revisa las reglas.");
-                console.error(error);
-                btnLiz.textContent = "Reintentar 🚀";
-                btnLiz.style.background = "#ff5555";
-                btnLiz.style.color = "white";
-                btnLiz.disabled = false;
-            });
-        }
-
-        // =========================================
-        // BOTÓN SOFI: LEER Y ABRIR LEMUR
-        // =========================================
-        window.entrarSalaSofi = function() {
-            if (!linkMagicoActual) return;
-            
-            const linkSinHttps = linkMagicoActual.replace("https://", "");
-            const urlLemur = `intent://${linkSinHttps}#Intent;scheme=https;package=com.lemurbrowser.exts;end;`;
-            window.location.href = urlLemur;
-        }
-
-        // Registro Service Worker para PWA
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then((reg) => console.log('SW registrado'))
-                    .catch((err) => console.log('Error SW', err));
-            });
-        }
-    </script>
+    <script type="module" src="hub.js"></script>
 </body>
 </html>
